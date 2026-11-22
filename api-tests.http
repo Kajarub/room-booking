@@ -1,0 +1,59 @@
+### 0. Healthcheck - sprawdzenie działania serwera
+GET http://localhost:8080/api/health
+Accept: application/json
+
+### 1. Pobranie wszystkich sal
+GET http://localhost:8080/api/rooms
+Accept: application/json
+
+### 2. Pobranie pojedynczej sali (istniejącej - oczekiwane 200 OK)
+GET http://localhost:8080/api/rooms/1
+Accept: application/json
+
+### 3. Pobranie nieistniejącej sali (oczekiwane 404 Not Found)
+GET http://localhost:8080/api/rooms/999
+Accept: application/json
+
+### 4. Utworzenie nowej sali (oczekiwane 201 Created + nagłówek Location)
+POST http://localhost:8080/api/rooms
+Content-Type: application/json
+
+{
+  "name": "Sala D305",
+  "building": "Budynek D",
+  "floor": 3,
+  "capacity": 32,
+  "hasProjector": true
+}
+
+### 5. Próba utworzenia sali z błędnymi danymi (oczekiwane 400 Bad Request w Zadaniu 6)
+POST http://localhost:8080/api/rooms
+Content-Type: application/json
+
+{
+  "name": "",
+  "building": "Budynek D",
+  "floor": 1,
+  "capacity": -5,
+  "hasProjector": false
+}
+
+### 6. Aktualizacja istniejącej sali (oczekiwane 200 OK)
+PUT http://localhost:8080/api/rooms/1
+Content-Type: application/json
+
+{
+  "name": "Sala A101 (Po remoncie)",
+  "building": "Budynek A",
+  "floor": 1,
+  "capacity": 30,
+  "hasProjector": true,
+  "available": false
+}
+
+### 7. Filtrowanie sal po minimalnej pojemności i projektorze (Zadanie 5)
+GET http://localhost:8080/api/rooms?minCapacity=25&hasProjector=true
+Accept: application/json
+
+### 8. Usunięcie sali (oczekiwane 204 No Content, przy powtórzeniu 404 Not Found)
+DELETE http://localhost:8080/api/rooms/2
